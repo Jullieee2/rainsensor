@@ -1,0 +1,14 @@
+//Arduino Code - Rain Sensor
+ 
+int Rain_signal = A0; //Define the Analog pin# on the Arduino for the rain sensor signal
+ 
+void setup() {
+  Serial.begin(9600); // Start the serial communication
+}
+ 
+void loop() {
+  int Rain = analogRead(Rain_signal);
+  Serial.print("Rain Level: ");
+  Serial.println(Rain);
+  delay(200);
+}
