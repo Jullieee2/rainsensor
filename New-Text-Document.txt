@@ -1,0 +1,50 @@
+// Rain detection variables
+int rainSensorPin = A3;  // Pin connected to rain sensor
+int ledPin = 4;          // Pin for the LED (for rain indication)
+
+// Motor control variables
+int In1 = 7;  // Motor 1 IN1
+int In2 = 8;  // Motor 1 IN2
+int ENA = 5;  // Motor 1 ENA (Speed control)
+int SPEED = 100;  // Motor speed (0-255)
+
+// Setup function
+void setup() {
+  Serial.begin(9600);  // Enable serial monitor
+  pinMode(ledPin, OUTPUT);  // Define LED pin
+  pinMode(In1, OUTPUT);  // Motor control pins
+  pinMode(In2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+
+  digitalWrite(In1, HIGH);  // Set motor direction
+  digitalWrite(In2, LOW);   // Set motor direction
+  
+  // Set the motor speed (ENA controls speed with PWM)
+  analogWrite(ENA, SPEED);
+}
+
+// Main loop
+void loop() {
+  int rainValue = analogRead(rainSensorPin);  // Read the rain sensor value
+  Serial.print("Rain Value: ");
+  Serial.println(rainValue);
+  
+  if (rainValue < 750) {  // If heavy rain is detected (value less than 750)
+    digitalWrite(ledPin, HIGH);  // Turn on the LED
+    Serial.println("Heavy rain detected. Motor is ON.");
+    // You can also add more code to change motor behavior when rain is detected
+    // Example: set motor to run in counterclockwise or clockwise direction depending on need
+    digitalWrite(In1, HIGH);
+    digitalWrite(In2, LOW);
+    analogWrite(ENA, SPEED);  // Ensure motor runs at the set speed
+  } else {
+    digitalWrite(ledPin, LOW);  // Turn off the LED if no rain or light rain
+    Serial.println("No heavy rain. Motor is OFF.");
+    // Turn off the motor if no rain detected (optional)
+    digitalWrite(In1, LOW);
+    digitalWrite(In2, LOW);
+    analogWrite(ENA, 0);  // Motor off (0 speed)
+  }
+
+  delay(1000);  // Delay for 1 second before checking again
+}
